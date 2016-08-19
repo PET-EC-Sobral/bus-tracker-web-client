@@ -1,0 +1,35 @@
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  padding: 0; 
+  font-family: sans-serif;
+  position: relative;
+  background-color: #DDDDDD;
+}
+#map {
+  float:left;
+  top:0px;
+  height: 100%; 
+  width: 80%;
+}
+#panel{
+  float:right;
+  width:20%;
+  overflow: scroll;
+  height:100%;
+}
+#messages-title{
+  background-color: #EEEEEE;
+  padding: 10px 0px;
+  vertical-align: center;
+  border-top: solid #FFFFFF 2px;
+}
+#route-description{
+  padding-left: 1em;
+}
+.center-text{
+  text-align: center;
+}
+.hidden{
+  display: none !important;
+}
