@@ -4,6 +4,12 @@ html, body {
   padding: 0; 
   font-family: sans-serif;
   position: relative;
+}
+.clickable-item:hover{
+  background-color: #AAAAAA;
+  cursor: pointer; 
+}
+.clickable-item{
   background-color: #DDDDDD;
 }
 #map {
@@ -15,7 +21,7 @@ html, body {
 #panel{
   float:right;
   width:20%;
-  overflow: scroll;
+  overflow-y: scroll;
   height:100%;
 }
 #messages-title{
@@ -32,4 +38,10 @@ html, body {
 }
 .hidden{
   display: none !important;
+}
+.scrollable-y{
+  overflow-y: scroll; 
+}
+.modal-body{
+  height: 80%;
 }

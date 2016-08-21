@@ -9,6 +9,7 @@
   "author": "Santana",
   "license": "MIT",
   "dependencies": {
+    "bootstrap": "^3.3.7",
     "jquery": "^3.1.0",
     "list.js": "^1.2.0",
     "polyline": "^0.2.0"
