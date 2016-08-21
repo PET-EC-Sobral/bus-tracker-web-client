@@ -40,7 +40,6 @@
       </div>
     </div>
 
-    <script type="text/javascript" src="./node_modules/polyline/src/polyline.js"></script>
     <script type="text/javascript" src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="./node_modules/list.js/dist/list.min.js"></script>
