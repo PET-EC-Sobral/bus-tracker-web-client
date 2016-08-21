@@ -1,6 +1,7 @@
 var SERVER_PREFIX = "http://santana.azurewebsites.net/BusTrackerSecureAPI/index.php";
 var ROUTE = 86;
-var UPDATE_TIME_POSITION = 1000;
+var UPDATE_TIME_POSITION = 3000;
+var TOKEN = "JpURojQBMP7fD5gYC6t26jb9A40FPae2JNjRBzJpo4NoBgpkRKOW6U8b8naLPa+dEvR0Z0+tHcHEnp8Wxjj4MGfVYarqY73d2j9cF5cCAuEpus2Oj9bmuCVQjbxF7wPIViWRi99yO0YZOGF4EEpaZGRiTJCMaAV+CcyHa15soT5AY+qOJgHEsqK2irem9TYuPZP0DKipQK0sWYNoDGyszYPo0x71W8H7uVT69GFzgJQ=";
 var map;
 var route;
 var timerId;
@@ -31,7 +32,7 @@ function selecteRoute(id){
 		timerId = setInterval(function(){
 			if(route.update)
 				route.update(false);
-		}, 3000);
+		}, UPDATE_TIME_POSITION);
 
 		panel.setRoute(route);
 	}
@@ -71,7 +72,7 @@ Route.prototype = {
 			type: "GET",
 			url: SERVER_PREFIX+"/routes/"+this.id_route,
 			dataType: 'json',
-			headers: {'Content-Type': 'text/plain', 'Token': 'JpURojQBMP7fD5gYC6t26jb9A40FPae2JNjRBzJpo4NoBgpkRKOW6U8b8naLPa+dEvR0Z0+tHcHEnp8Wxjj4MGfVYarqY73d2j9cF5cCAuEpus2Oj9bmuCVQjbxF7wPIViWRi99yO0YZOGF4EEpaZGRiTJCMaAV+CcyHa15soT5AY+qOJgHEsqK2irem9TYuPZP0DKipQK0sWYNoDGyszYPo0x71W8H7uVT69GFzgJQ=' },
+			headers: {'Content-Type': 'text/plain', 'Token': TOKEN },
 		})
 	     .done(function(data) {
 	     	this.routeAPI = data;
@@ -144,7 +145,7 @@ Bus.prototype = {
 			type: "GET",
 			url: SERVER_PREFIX+"/routes/"+this.id_route+"/buses/"+this.id_buses+"/positions?length=1",
 			dataType: 'json',
-			headers: {'Content-Type': 'text/plain', 'Token': 'JpURojQBMP7fD5gYC6t26jb9A40FPae2JNjRBzJpo4NoBgpkRKOW6U8b8naLPa+dEvR0Z0+tHcHEnp8Wxjj4MGfVYarqY73d2j9cF5cCAuEpus2Oj9bmuCVQjbxF7wPIViWRi99yO0YZOGF4EEpaZGRiTJCMaAV+CcyHa15soT5AY+qOJgHEsqK2irem9TYuPZP0DKipQK0sWYNoDGyszYPo0x71W8H7uVT69GFzgJQ=' },
+			headers: {'Content-Type': 'text/plain', 'Token': TOKEN },
 		})
 	     .done(function(data) {
 	     	if(data[0])
@@ -194,7 +195,7 @@ Panel.prototype = {
 			type: "GET",
 			url: SERVER_PREFIX+"/routes",
 			dataType: 'json',
-			headers: {'Content-Type': 'text/plain', 'Token': 'JpURojQBMP7fD5gYC6t26jb9A40FPae2JNjRBzJpo4NoBgpkRKOW6U8b8naLPa+dEvR0Z0+tHcHEnp8Wxjj4MGfVYarqY73d2j9cF5cCAuEpus2Oj9bmuCVQjbxF7wPIViWRi99yO0YZOGF4EEpaZGRiTJCMaAV+CcyHa15soT5AY+qOJgHEsqK2irem9TYuPZP0DKipQK0sWYNoDGyszYPo0x71W8H7uVT69GFzgJQ=' },
+			headers: {'Content-Type': 'text/plain', 'Token': TOKEN },
 		})
 	     .done(function(routes) {
 	     	console.log(routes);
@@ -265,7 +266,7 @@ Panel.prototype = {
 				type: "GET",
 				url: SERVER_PREFIX+"/routes/"+this.route.id_route+"/messages?buses=true",
 				dataType: 'json',
-				headers: {'Content-Type': 'text/plain', 'Token': 'JpURojQBMP7fD5gYC6t26jb9A40FPae2JNjRBzJpo4NoBgpkRKOW6U8b8naLPa+dEvR0Z0+tHcHEnp8Wxjj4MGfVYarqY73d2j9cF5cCAuEpus2Oj9bmuCVQjbxF7wPIViWRi99yO0YZOGF4EEpaZGRiTJCMaAV+CcyHa15soT5AY+qOJgHEsqK2irem9TYuPZP0DKipQK0sWYNoDGyszYPo0x71W8H7uVT69GFzgJQ=' },
+				headers: {'Content-Type': 'text/plain', 'Token': TOKEN },
 			})
 		     .done(function(data) {
 		     	this.messages = data;
