@@ -2,8 +2,9 @@ html, body {
   height: 100%; 
   margin: 0; 
   padding: 0; 
-  font-family: sans-serif;
+  font-family: 'Roboto',sans-serif;
   position: relative;
+  text-rendering: optimizeLegibility;
 }
 .clickable-item:hover{
   background-color: #AAAAAA;
@@ -44,4 +45,18 @@ html, body {
 }
 .modal-body{
   height: 80%;
+}
+
+/* scroll bar*/
+*::-webkit-scrollbar {
+    width: 6px!important;
+    height: 6px!important;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,.2);
+}
+
+*::-webkit-scrollbar-track {
+    background: rgba(255,255,255,.08);
 }
