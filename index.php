@@ -5,21 +5,46 @@
 
 
     <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="./src/css/map.css" />
+    <link rel="stylesheet" type="text/css" href="./assets/mobile-menu-hamburger/css/hamburger.css"/>    
     <link rel="stylesheet" type="text/css" href="./src/css/list.css" />
+    <link rel="stylesheet" type="text/css" href="./src/css/map.css" />
   </head>
   <body>
-    <div id="map"></div>
-    <div id="panel">
-      <div id="route" class="clickable-item">
-        <h3 id="route-name" class="center-text">UFC</h3>
-        <p id="route-description">
-        </p>
-      </div>
-      <div id="messages-title" class="center-text"><b>Mensagens</b></div>
-      <div id="messages">
-        <ul class="list">
-        </ul>
+    <div id="container">
+      <header>
+        <div id="hamburger">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+      </header>
+
+      <nav>
+        <div id="panel">
+          <div id="route" class="clickable-item">
+            <h3 id="route-name" class="center-text">UFC</h3>
+            <p id="route-description">
+            </p>
+          </div>
+          <div id="messages-title" class="center-text"><b>Mensagens</b></div>
+          <div id="messages">
+            <ul class="list">
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <!--The Layer that will be layed over the content
+      so that the content is unclickable while menu is shown-->
+      <div id="contentLayer"></div>
+
+      <!--The content of the site-->
+      <div id="content">
+
+        <div id="map"></div>
+
+
+        
       </div>
     </div>
 
@@ -28,10 +53,10 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Rotas</h4>
+            <h4 class="modal-title">Selecione uma rota</h4>
           </div>
-          <div class="modal-body scrollable-y">
-            <div id="routes">
+          <div class="modal-body">
+            <div id="routes" class="scrollable-y">
               <ul class="list">
               </ul>
             </div>
@@ -41,7 +66,9 @@
     </div>
 
     <script type="text/javascript" src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="./node_modules/jquery-ui/dist/jquery-ui.min.js"></script>
     <script type="text/javascript" src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="./assets/mobile-menu-hamburger/js/hamburger.js"></script>
     <script type="text/javascript" src="./node_modules/list.js/dist/list.min.js"></script>
     <script type="text/javascript" src="./src/js/map.js">
     </script>
