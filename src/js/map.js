@@ -1,4 +1,4 @@
-var SERVER_PREFIX = "http://localhost:50001" || "http://santana.azurewebsites.net/BusTrackerSecureAPI/index.php";
+var SERVER_PREFIX = "http://santana.azurewebsites.net/BusTrackerSecureAPI/index.php";
 var ROUTE = 86;
 var UPDATE_TIME_POSITION = 3000;
 var UPDATE_TIME_MESSAGE = 5000;
