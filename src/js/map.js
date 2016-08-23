@@ -1,6 +1,7 @@
-var SERVER_PREFIX = "http://santana.azurewebsites.net/BusTrackerSecureAPI/index.php";
+var SERVER_PREFIX = "http://localhost:50001" || "http://santana.azurewebsites.net/BusTrackerSecureAPI/index.php";
 var ROUTE = 86;
 var UPDATE_TIME_POSITION = 3000;
+var UPDATE_TIME_MESSAGE = 5000;
 var TOKEN = "JpURojQBMP7fD5gYC6t26jb9A40FPae2JNjRBzJpo4NoBgpkRKOW6U8b8naLPa+dEvR0Z0+tHcHEnp8Wxjj4MGfVYarqY73d2j9cF5cCAuEpus2Oj9bmuCVQjbxF7wPIViWRi99yO0YZOGF4EEpaZGRiTJCMaAV+CcyHa15soT5AY+qOJgHEsqK2irem9TYuPZP0DKipQK0sWYNoDGyszYPo0x71W8H7uVT69GFzgJQ=";
 var map;
 var route;
@@ -18,6 +19,11 @@ function initMap() {
 		el: "messages",
 		route: route
 	});
+
+	//check messages
+	setInterval(function(){
+		panel.update();
+	}, UPDATE_TIME_MESSAGE);
 
 	selecteRoute(ROUTE);
 }
@@ -173,21 +179,19 @@ function Panel(op){
 	this.route = op.route || {};
 	this.routeList = {};
 	
+	$("#route").on("click", function(){
+		$("#select-route-modal").modal("show");	
+	});
 
-
-	this.update(this.init.bind(this));
+	this.update(this.__init.bind(this));
 }
 Panel.prototype = {
-	init: function(){
+	__init: function(){
 		this.__updateMessagesList;
-		this.setRoute(this.route);
+		this.setRoute(this.route, false);
 		
 		if(!this.routes)
 			this.__makeRoutesList();
-
-		$("#route").on("click", function(){
-			$("#select-route-modal").modal("show");	
-		});
 
 	},
 	__makeRoutesList: function(){
@@ -288,9 +292,12 @@ Panel.prototype = {
 			$("#route-description").text(this.route.routeAPI.description);
 		}
 	},
-	setRoute: function(route){
+	setRoute: function(route, update){
+		update = update === undefined ? true : update;
+
 		this.route = route;
-		this.update(this.init.bind(this));
 		this.route.onUpdateRouteAPI = this.__updateInfoRoute.bind(this);
+		if(update)
+			this.update(this.__init.bind(this));
 	}
 }
