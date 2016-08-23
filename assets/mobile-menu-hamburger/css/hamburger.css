@@ -125,3 +125,38 @@ so that the content is unclickable while menu is shown
     width: 30%;
     z-index: 5;
 }
+
+
+/* big devices*/
+
+@media screen and (min-width: 720px) and (max-width: 1499px) {
+    /* remove header*/
+    header{
+        display: none;
+    }
+    #content {
+        padding: 0px;
+        margin-left: 30%;
+    }
+
+    nav{
+        opacity:1 !important;
+        width: 30%;
+    }
+}
+
+@media screen and (min-width: 1500px) {
+    /* remove header*/
+    header{
+        display: none;
+    }
+    #content {
+        padding: 0px;
+        margin-left: 20%;
+    }
+
+    nav{
+        opacity:1 !important;
+        width: 20%;
+    }
+}
