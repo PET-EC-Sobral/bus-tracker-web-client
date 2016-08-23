@@ -27,11 +27,6 @@ jQuery(document).ready(function () {
         //display a layer to disable clicking and scrolling on the content while menu is shown
         jQuery('#contentLayer').css('display', 'block');
 
-        //disable all scrolling on mobile devices while menu is shown
-        jQuery('#container').bind('touchmove', function (e) {
-            e.preventDefault()
-        });
-
         //set margin for the whole container with a jquery UI animation
         jQuery("#container").animate({"marginLeft": ["70%", 'easeOutExpo']}, {
             duration: 700
@@ -41,9 +36,6 @@ jQuery(document).ready(function () {
 
     //close the menu
     jQuery("#contentLayer").click(function () {
-
-        //enable all scrolling on mobile devices when menu is closed
-        jQuery('#container').unbind('touchmove');
 
         //set margin for the whole container back to original state with a jquery UI animation
         jQuery("#container").animate({"marginLeft": ["-1", 'easeOutExpo']}, {
