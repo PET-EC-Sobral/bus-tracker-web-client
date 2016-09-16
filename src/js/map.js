@@ -147,6 +147,28 @@ function Bus(op){
             icon: MARKER_ICON,
             animation: google.maps.Animation.DROP
     });
+
+    this.tooltip = new google.maps.InfoWindow({
+    	content: "<b>ônibus "+this.id_buses+"</b>"
+  	});
+
+    //events marker tooltip
+    var hasClicked = false;
+  	this.marker.addListener('click', function() {
+    	hasClicked = true;
+    	this.tooltip.open(map, this.marker);
+  	}.bind(this));
+  	this.marker.addListener('mouseover', function() {
+    	this.tooltip.open(map, this.marker);
+  	}.bind(this));
+  	this.marker.addListener('mouseout', function() {
+    	if(!hasClicked)
+    		this.tooltip.close(map, this.marker);
+  	}.bind(this));
+
+  	this.tooltip.addListener('closeclick', function() {
+    	hasClicked = false;
+  	}.bind(this));
 }
 Bus.prototype = {
 	updatePosition: function(){
