@@ -148,9 +148,9 @@ function Bus(op){
 
 	var icon = {
 	    url: MARKER_ICON, // url
-	    scaledSize: new google.maps.Size(30, 35), // scaled size
+	    scaledSize: new google.maps.Size(Bus.ICON_SIZE.w, Bus.ICON_SIZE.h), // scaled size
 	    origin: new google.maps.Point(0,0), // origin
-	    anchor: new google.maps.Point(0, 0) // anchor
+	    anchor: new google.maps.Point(Bus.ICON_SIZE.w/2, Bus.ICON_SIZE.h) // anchor
 	};
 
 	this.marker = new google.maps.Marker({
@@ -181,6 +181,9 @@ function Bus(op){
     	hasClicked = false;
   	}.bind(this));
 }
+$.extend(Bus, {
+	ICON_SIZE: {w: 30, h: 35}
+})
 Bus.prototype = {
 	updatePosition: function(){
 		$.ajax( {
