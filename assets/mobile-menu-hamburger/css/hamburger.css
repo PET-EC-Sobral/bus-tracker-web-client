@@ -2,7 +2,7 @@
 Header is relative so z-index: 1 guarantees always displayed on top
 */
 header {
-    background-color: #3b5998;
+    background-color: #00648C;
     padding: 10px;
     text-decoration: none;
     position: fixed;
@@ -30,7 +30,7 @@ position absolute isset to cover the whole viewport
 the hamburger button with a little gradient effekt
 */
 #hamburger {
-    border: 1px solid #374C77;
+    border: 1px solid #005273;
     border-radius: 3px 3px 3px 3px;
     cursor: pointer;
     display: block;
@@ -38,13 +38,13 @@ the hamburger button with a little gradient effekt
     padding: 3px 4px 3px;
     position: relative;
     width: 25px;
-    background: #4569b2;
-    background: -moz-linear-gradient(top, #4569b2 0%, #4062a5 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #4569b2), color-stop(100%, #4062a5));
-    background: -webkit-linear-gradient(top, #4569b2 0%, #4062a5 100%);
-    background: -o-linear-gradient(top, #4569b2 0%, #4062a5 100%);
-    background: -ms-linear-gradient(top, #4569b2 0%, #4062a5 100%);
-    background: linear-gradient(to bottom, #4569b2 0%, #4062a5 100%);
+    background: #006D99;
+    background: -moz-linear-gradient(top, #006D99 0%, #4062a5 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #006D99), color-stop(100%, #4062a5));
+    background: -webkit-linear-gradient(top, #006D99 0%, #4062a5 100%);
+    background: -o-linear-gradient(top, #006D99 0%, #4062a5 100%);
+    background: -ms-linear-gradient(top, #006D99 0%, #4062a5 100%);
+    background: linear-gradient(to bottom, #006D99 0%, #4062a5 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4569b2', endColorstr='#4062a5', GradientType=0);
 }
 

@@ -8,11 +8,11 @@ html, body {
   overflow:hidden;
 }
 .clickable-item:hover{
-  background-color: #3a507f !important;
-  cursor: pointer; 
+  background-color: #007DAD !important;
+  cursor: pointer;
 }
 .clickable-item{
-  background-color: #284582 !important;
+  background-color: #00648C !important;
 }
 #map {
   float:left;
@@ -62,7 +62,7 @@ html, body {
   padding-bottom: 10px; 
 }
 .modal-title{
-  color: #3a507f;
+  color: #007DAD;
   font-weight: bold;
 }
 /* scroll bar*/
@@ -72,7 +72,7 @@ html, body {
 }
 
 *::-webkit-scrollbar-thumb {
-    background-color: rgb(67, 115, 216);
+    background-color: rgb(0, 157, 219);
 }
 
 *::-webkit-scrollbar-track {

@@ -73,6 +73,9 @@ function Route(op, onCreate){
 	}.bind(this));
 	
 }
+$.extend(Route, {
+	COLOR: "#0092CC"
+});
 Route.prototype = {
 	__getRouteFromApi: function(callback){
 		$.ajax( {
@@ -105,8 +108,8 @@ Route.prototype = {
         var pathEncoded = this.routeAPI.googleRoute.routes[0].overview_polyline.points;
         var path = google.maps.geometry.encoding.decodePath(pathEncoded);
         this.poly = new google.maps.Polyline({
-		    strokeColor: '#000000',
-		    strokeOpacity: 0.7,
+		    strokeColor: Route.COLOR,
+		    strokeOpacity: 0.9,
 		    strokeWeight: 5,
 		    path: path
 		});
