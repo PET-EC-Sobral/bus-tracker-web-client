@@ -3,7 +3,7 @@ var ROUTE = 86;
 var UPDATE_TIME_POSITION = 3000;
 var UPDATE_TIME_MESSAGE = 5000;
 var TOKEN = "JpURojQBMP7fD5gYC6t26jb9A40FPae2JNjRBzJpo4NoBgpkRKOW6U8b8naLPa+dEvR0Z0+tHcHEnp8Wxjj4MGfVYarqY73d2j9cF5cCAuEpus2Oj9bmuCVQjbxF7wPIViWRi99yO0YZOGF4EEpaZGRiTJCMaAV+CcyHa15soT5AY+qOJgHEsqK2irem9TYuPZP0DKipQK0sWYNoDGyszYPo0x71W8H7uVT69GFzgJQ=";
-var MARKER_ICON = "../../assets/img/marker.png"
+var MARKER_ICON = "assets/img/marker.png"
 var map;
 var route;
 var timerId;
@@ -142,9 +142,17 @@ function Bus(op){
 	if(op.map === undefined)
 		throw new {message:"map not defined"};
 	var map = op.map
+
+	var icon = {
+	    url: MARKER_ICON, // url
+	    scaledSize: new google.maps.Size(30, 35), // scaled size
+	    origin: new google.maps.Point(0,0), // origin
+	    anchor: new google.maps.Point(0, 0) // anchor
+	};
+
 	this.marker = new google.maps.Marker({
             map: map,
-            icon: MARKER_ICON,
+            icon: icon,
             animation: google.maps.Animation.DROP
     });
 
