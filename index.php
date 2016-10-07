@@ -2,6 +2,14 @@
   <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1" />
+	<meta property="og:image" content="http://www.pet.ec.ufc.br/bustracker/images/logo.png">
+	
+	<link href="assets/img/marker.png" rel="shortcut icon">
+    <link href="assets/img/marker.png" rel="apple-touch-icon">
+    <link href="assets/img/marker.png" rel="apple-touch-icon" sizes="72x72">
+    <link href="assets/img/marker.png" rel="apple-touch-icon" sizes="114x114">
+    
+    <title>Bus Traker</title>
 
 
     <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap/dist/css/bootstrap.min.css" />
