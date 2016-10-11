@@ -136,6 +136,8 @@ Route.prototype = {
 
 function Bus(op){
 	op = op || {};
+
+	this.position;
 	
 	if(!op.id_buses)
 		throw new {message:"id_buses not defined"};
@@ -193,16 +195,36 @@ Bus.prototype = {
 			headers: {'Content-Type': 'text/plain', 'Token': TOKEN },
 		})
 	     .done(function(data) {
-	     	if(data[0])
-		     	this.marker.setPosition({lat: data[0].latitude, lng: data[0].longitude});
+	     	if(data[0]){
+		     	this.position = {lat: data[0].latitude, lng: data[0].longitude};
+		     	this.marker.setPosition(this.position);
+		     }
 	        
 		 }.bind(this))
 		 .fail(function(data) {
 		    console.log("error:\n", data);
 		 });
+
+		 this.updateFormattedAddress();
 	},
 	clearDrawing: function(){
 		this.marker.setMap(null);
+	},
+	updateFormattedAddress: function(){
+		if(this.position)
+			$.ajax( {
+				type: "GET",
+				url: "https://maps.googleapis.com/maps/api/geocode/json?latlng="+this.position.lat+","+this.position.lng,
+				dataType: 'json',
+				headers: {'Content-Type': 'text/plain'},
+			})
+		     .done(function(data) {
+		     	if(data.results[0].formatted_address)
+		     	this.tooltip.setContent("<center><b>ônibus "+this.id_buses+"</b></center><p>"+data.results[0].formatted_address+"</p>")
+			 }.bind(this))
+			 .fail(function(data) {
+			    console.log("error:\n", data);
+			 });
 	}
 }
 
