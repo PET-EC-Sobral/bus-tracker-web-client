@@ -29,7 +29,7 @@ function initMap() {
 	selecteRoute(ROUTE);
 }
 function selecteRoute(id){
-	if(route)
+	if(route && route.clearDrawing)
 		route.clearDrawing();
 	
 	var onCreate = function(){
