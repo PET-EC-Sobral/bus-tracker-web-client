@@ -27,6 +27,46 @@ function initMap() {
 	}, UPDATE_TIME_MESSAGE);
 
 	selecteRoute(ROUTE);
+
+	showUserLocation();
+}
+function showUserLocation(){
+
+	if(!("geolocation" in navigator)){
+		return;
+	}
+
+	var MARKER_USER_ICON = "assets/img/marker_smile.png";
+	var icon = {
+	    url: MARKER_USER_ICON, // url
+	    scaledSize: new google.maps.Size(30, 35), // scaled size
+	    origin: new google.maps.Point(0,0), // origin
+	    anchor: new google.maps.Point(30/2, 35) // anchor
+	};
+
+	var marker = new google.maps.Marker({
+            map: map,
+            icon: icon,
+            animation: google.maps.Animation.DROP
+    });
+
+    var options = {
+	  enableHighAccuracy: true,
+	  timeout: 5000,
+	  maximumAge: 0
+	};
+
+	var onPosition = function(position) {
+		console.log(position);
+		var position = {lat: position.coords.latitude, lng: position.coords.longitude};
+  		marker.setPosition(position);
+	};
+
+	var onPositionError = function(){
+		marker.setMap(null);
+	}
+
+	var watchID = navigator.geolocation.watchPosition(onPosition, onPositionError, options);
 }
 function selecteRoute(id){
 	if(route && route.clearDrawing)
