@@ -74,7 +74,8 @@ function Route(op, onCreate){
 	
 }
 $.extend(Route, {
-	COLOR: "#0092CC"
+	COLOR: "#0092CC",
+	ARROW_ICON_URL: "assets/img/arrow.png"
 });
 Route.prototype = {
 	__getRouteFromApi: function(callback){
@@ -104,6 +105,13 @@ Route.prototype = {
 		}
 	},
 	__drawRoute: function(){
+		var iconsetngs = {
+			path: "M -1.6058721,2.4184373 0.00299209,0.01667308 1.529614,2.4067857",
+    		strokeOpacity: 1,
+    		scale: 4,
+    		strokeWeight: 4
+    	}
+
 		//draw route from response
         var pathEncoded = this.routeAPI.googleRoute.routes[0].overview_polyline.points;
         var path = google.maps.geometry.encoding.decodePath(pathEncoded);
@@ -111,7 +119,12 @@ Route.prototype = {
 		    strokeColor: Route.COLOR,
 		    strokeOpacity: 0.9,
 		    strokeWeight: 5,
-		    path: path
+		    path: path,
+		    icons: [{
+	            icon: iconsetngs,
+	            repeat:'63px',
+	            offset: '100%'
+	        }]
 		});
 		this.poly.setMap(this.map);
 	},
