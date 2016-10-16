@@ -33,7 +33,7 @@ the hamburger button with a little gradient effekt
     border: 1px solid #005273;
     border-radius: 3px 3px 3px 3px;
     cursor: pointer;
-    display: block;
+    display: inline-block;
     height: 24px;
     padding: 3px 4px 3px;
     position: relative;
@@ -58,6 +58,15 @@ The white stripes in the hamburger button
     height: 2px;
     margin-top: 3px;
     width: 90%;
+}
+
+header .title{
+    color: #FFFFFF;
+    font-size: 16px;
+    display: inline-block;
+    position: absolute;
+    top: 12px;
+    margin-left: 13px;
 }
 
 /*

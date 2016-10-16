@@ -25,6 +25,7 @@
             <div></div>
             <div></div>
         </div>
+        <div class="title">Busão GO</div>
       </header>
 
       <nav>
