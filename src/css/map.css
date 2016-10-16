@@ -7,12 +7,27 @@ html, body {
   text-rendering: optimizeLegibility;
   overflow:hidden;
 }
+
+h3{
+  margin: 0px;
+}
+.fitcontent{
+    width: -webkit-fit-content;
+    height: -webkit-fit-content;
+    width: -moz-fit-content;
+    height: -moz-fit-content;
+}
+.center{
+  margin-left: auto;
+  margin-right: auto;
+}
 .clickable-item:hover{
   background-color: #007DAD !important;
   cursor: pointer;
 }
 .clickable-item{
   background-color: #00648C !important;
+  border-bottom: solid #b5b5b5 1px;
 }
 #map {
   float:left;
@@ -29,7 +44,6 @@ html, body {
 }
 #messages-title{
   padding: 10px 0px;
-  border-top: solid #b5b5b5 1px;
   border-bottom: solid #b5b5b5 1px;
 }
 #route-description{
@@ -42,12 +56,27 @@ html, body {
 }
 
 #route h3{
-  margin-top: 0px;
+  margin-bottom: 10px;
 }
 #routes{
   width: 100%;
   height: 100%;
 }
+
+#app-info{
+  padding: 10px 10px; 
+  margin-left: auto;
+  margin-right: auto;
+}
+#app-info .logo{
+  width: 50px;
+  display: inline-block;
+}
+#app-info h3{
+  display: inline-block;
+  vertical-align: middle;
+}
+
 .center-text{
   text-align: center;
 }

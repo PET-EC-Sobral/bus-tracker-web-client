@@ -57,6 +57,7 @@ function showUserLocation(){
 	};
 
 	var onPosition = function(position) {
+		marker.setMap(map);
 		console.log(position);
 		var position = {lat: position.coords.latitude, lng: position.coords.longitude};
   		marker.setPosition(position);
@@ -297,8 +298,16 @@ function Panel(op){
 		$("#select-route-modal").modal("show");	
 	});
 
+	$("#app-info").on("click", function(){
+		var win = window.open(Panel.LINK_BUSTRACKER_PAGE, '_blank');
+  		win.focus();
+	});
+
 	this.update(this.__init.bind(this));
 }
+$.extend(Panel, {
+	LINK_BUSTRACKER_PAGE: "bustracker"
+});
 Panel.prototype = {
 	__init: function(){
 		this.__updateMessagesList;

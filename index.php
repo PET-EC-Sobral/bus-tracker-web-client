@@ -30,6 +30,12 @@
 
       <nav>
         <div id="panel">
+          <div id="app-info" class="clickable-item">
+            <div class="center fitcontent">
+              <img class="logo" src="assets/img/logo.png" />
+              <h3 class="app-name">Busão GO</h3>
+            </div>
+          </div>
           <div id="route" class="clickable-item">
             <h3 id="route-name" class="center-text">UFC</h3>
             <p id="route-description">
