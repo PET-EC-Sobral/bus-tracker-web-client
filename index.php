@@ -9,7 +9,7 @@
     <link href="assets/img/marker.png" rel="apple-touch-icon" sizes="72x72">
     <link href="assets/img/marker.png" rel="apple-touch-icon" sizes="114x114">
     
-    <title>Bus Traker</title>
+    <title>Busão GO</title>
 
 
     <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap/dist/css/bootstrap.min.css" />
