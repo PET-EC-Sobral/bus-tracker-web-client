@@ -306,7 +306,7 @@ function Panel(op){
 	this.update(this.__init.bind(this));
 }
 $.extend(Panel, {
-	LINK_BUSTRACKER_PAGE: "bustracker"
+	LINK_BUSTRACKER_PAGE: "http://www.pet.ec.ufc.br/bustracker/"
 });
 Panel.prototype = {
 	__init: function(){
