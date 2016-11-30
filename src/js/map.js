@@ -288,7 +288,7 @@ Bus.prototype = {
 		tooltipContent = "<center><b>Ônibus "+this.id_buses+"</b></center>";
 		tooltipContent += "<p>"+(this.formattedAddress || "")+"</p>";
 		if(this.lastUpdate)
-			tooltipContent += "<p style='text-align:right;font-size:9px'> Ultima atualização a "+this.getTimeAgo()+"</p>";
+			tooltipContent += "<p style='text-align:right;font-size:9px'> Ultima atualização "+this.getTimeAgo()+"</p>";
 		
 		this.tooltip.setContent(tooltipContent);
 	},
