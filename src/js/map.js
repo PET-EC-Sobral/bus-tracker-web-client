@@ -192,6 +192,8 @@ function Bus(op){
 	op = op || {};
 
 	this.position;
+	this.lastUpdate;
+	this.formattedAddress;
 	
 	if(!op.id_buses)
 		throw new {message:"id_buses not defined"};
@@ -251,6 +253,7 @@ Bus.prototype = {
 	     .done(function(data) {
 	     	if(data[0]){
 		     	this.position = {lat: data[0].latitude, lng: data[0].longitude};
+		     	this.lastUpdate = data[0].date;
 		     	this.marker.setPosition(this.position);
 		     }
 	        
@@ -260,6 +263,7 @@ Bus.prototype = {
 		 });
 
 		 this.updateFormattedAddress();
+		 this.updateTooltip();
 	},
 	clearDrawing: function(){
 		this.marker.setMap(null);
@@ -274,11 +278,23 @@ Bus.prototype = {
 			})
 		     .done(function(data) {
 		     	if(data.results[0].formatted_address)
-		     	this.tooltip.setContent("<center><b>ônibus "+this.id_buses+"</b></center><p>"+data.results[0].formatted_address+"</p>")
+		     		this.formattedAddress = data.results[0].formatted_address;
 			 }.bind(this))
 			 .fail(function(data) {
 			    console.log("error:\n", data);
 			 });
+	},
+	updateTooltip: function(){
+		tooltipContent = "<center><b>ônibus "+this.id_buses+"</b></center>";
+		tooltipContent += "<p>"+(this.formattedAddress || "")+"</p>";
+		if(this.lastUpdate)
+			tooltipContent += "<p style='text-align:right;font-size:9px'> Ultima atualização a "+this.getTimeAgo()+"</p>";
+		
+		this.tooltip.setContent(tooltipContent);
+	},
+	getTimeAgo: function(){
+		return jQuery.timeago(this.lastUpdate);
+
 	}
 }
 
