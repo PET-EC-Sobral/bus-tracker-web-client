@@ -293,8 +293,8 @@ Bus.prototype = {
 		this.tooltip.setContent(tooltipContent);
 	},
 	getTimeAgo: function(){
-		return jQuery.timeago(this.lastUpdate);
-
+		var time = Date.parse(this.lastUpdate) - 1000 * 60 * 60;
+		return jQuery.timeago(new Date(time));
 	}
 }
 
