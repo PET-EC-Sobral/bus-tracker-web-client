@@ -264,6 +264,7 @@ Bus.prototype = {
 		     		this.setStatus("stop");
 		     	else
 		     		this.setStatus("");
+
 		     }
 		 }.bind(this))
 		 .fail(function(data) {
@@ -310,7 +311,7 @@ Bus.prototype = {
 			this.marker.icon.url = MARKER_ICON;
 	},
 	isStoped: function(){
-		var last = Date.parse(this.lastUpdate);
+		var last = Date.parse(this.lastUpdate) - 1000 * 60 * 60;
 		return Date.parse(new Date()) - last > this.stopTime;
 	},
 	setStatus: function(status){
