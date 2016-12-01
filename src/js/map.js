@@ -194,6 +194,8 @@ function Bus(op){
 	this.position;
 	this.lastUpdate;
 	this.formattedAddress;
+	this.stopTime = 2*60*1000;
+	this.status = "";
 	
 	if(!op.id_buses)
 		throw new {message:"id_buses not defined"};
@@ -255,14 +257,18 @@ Bus.prototype = {
 		     	this.position = {lat: data[0].latitude, lng: data[0].longitude};
 		     	this.lastUpdate = data[0].date;
 		     	this.marker.setPosition(this.position);
+		     	this.updateFormattedAddress();
+		     	
+		     	if(this.isStoped)
+		     		this.setStatus("stop");
+		     	else
+		     		this.setStatus("");
 		     }
-	        
 		 }.bind(this))
 		 .fail(function(data) {
 		    console.log("error:\n", data);
 		 });
 
-		 this.updateFormattedAddress();
 		 this.updateTooltip();
 	},
 	clearDrawing: function(){
@@ -288,13 +294,33 @@ Bus.prototype = {
 		tooltipContent = "<center><b>Ônibus "+this.id_buses+"</b></center>";
 		tooltipContent += "<p>"+(this.formattedAddress || "")+"</p>";
 		if(this.lastUpdate)
-			tooltipContent += "<p style='text-align:right;font-size:9px'> Ultima atualização "+this.getTimeAgo()+"</p>";
+			tooltipContent += "<p style='text-align:right;font-size:10px'> "+this.timeAgoText+" "+this.getTimeAgo()+"</p>";
 		
 		this.tooltip.setContent(tooltipContent);
 	},
 	getTimeAgo: function(){
 		var time = Date.parse(this.lastUpdate) - 1000 * 60 * 60;
 		return jQuery.timeago(new Date(time));
+	},
+	setIcon: function(icon){
+		if(icon == 'stop')
+			this.marker.icon.url = "assets/img/marker-stop.png";
+		else
+			this.marker.icon.url = "assets/img/marker.png";
+	},
+	isStoped: function(){
+		var last = Date.parse(this.lastUpdate);
+		return Date.parse(new Date()) - last > this.stopTime;
+	},
+	setStatus: function(status){
+		this.setIcon(status);
+		this.status = status;
+		if (status == 'stop') {
+			this.timeAgoText = "O ônibus está parado";
+		}
+		else{
+			this.timeAgoText = "Ultima atualização";
+		}
 	}
 }
 
