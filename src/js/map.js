@@ -1,4 +1,4 @@
-var SERVER_PREFIX = "http://santana.azurewebsites.net/BusTrackerSecureAPI/index.php";
+var SERVER_PREFIX = "http://200.129.37.177/bustracker/BusTrackerAPI/index.php";
 var ROUTE = 86;
 var UPDATE_TIME_POSITION = 3000;
 var UPDATE_TIME_MESSAGE = 5000;
@@ -260,7 +260,7 @@ Bus.prototype = {
 		     	this.marker.setPosition(this.position);
 		     	this.updateFormattedAddress();
 		     	
-		     	if(this.isStoped)
+		     	if(this.isStoped())
 		     		this.setStatus("stop");
 		     	else
 		     		this.setStatus("");
