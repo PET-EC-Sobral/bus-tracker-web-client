@@ -301,7 +301,7 @@ Bus.prototype = {
 		this.tooltip.setContent(tooltipContent);
 	},
 	getTimeAgo: function(){
-		var time = Date.parse(this.lastUpdate) - 1000 * 60 * 60;
+		var time = Date.parse(this.lastUpdate);
 		return jQuery.timeago(new Date(time));
 	},
 	setIcon: function(icon){
@@ -311,7 +311,7 @@ Bus.prototype = {
 			this.marker.icon.url = MARKER_ICON;
 	},
 	isStoped: function(){
-		var last = Date.parse(this.lastUpdate) - 1000 * 60 * 60;
+		var last = Date.parse(this.lastUpdate);
 		return Date.parse(new Date()) - last > this.stopTime;
 	},
 	setStatus: function(status){
