@@ -105,6 +105,9 @@ function Route(op, onCreate){
 		if(typeof onCreate === 'function')
 			onCreate(this);
 	}.bind(this));
+
+	this.referencePoints;
+	this.__initReferencePoints();
 	
 }
 $.extend(Route, {
@@ -137,6 +140,33 @@ Route.prototype = {
 		for(var i = 0; i < busesId.length; i++){
 			this.buses[i] = new Bus({map: this.map, id_route: this.id_route, id_buses:busesId[i]});
 		}
+	},
+	__initReferencePoints: function(){
+		$.ajax( {
+			type: "GET",
+			url: BusTracker.SERVER_PREFIX+"/routes/"+this.id_route+"/referencepoints",
+			dataType: 'json',
+			headers: {'Content-Type': 'text/plain', 'Token': BusTracker.TOKEN },
+		})
+	     .done(function(data) {
+	     	//put reference points on map
+	     	if(data instanceof Array){
+	     		this.referencePoints = [];
+	     		data.forEach(function(e, i, a){
+	     			var reference = new ReferencePoint({
+	     				name: e.name,
+	     				image: e.image,
+	     				id_routes: e.id_routes,
+	     				description: e.description,
+	     				position: {lat: e.latitude, lng: e.longitude},
+	     				map: this.map
+	     			});
+	     		}.bind(this));
+	     	}
+		 }.bind(this))
+		 .fail(function(data) {
+		    console.log("error:\n", data);
+		 });	
 	},
 	__drawRoute: function(){
 		var iconsetngs = {
@@ -206,21 +236,22 @@ function Marker(op){
     	content: this.tooltipMakeup()
   	});
 
-
  	this.setPosition(op.position || {lat: 0, lng: 0});
+ 	this.visibilityTooltip = false;
+ 	this.formattedAddress;
 
     //events marker tooltip
     var hasClicked = false;
   	this.marker.addListener('click', function() {
     	hasClicked = true;
-    	this.tooltip.open(this.map, this.marker);
+    	this.setVisibityTooltip(true);
   	}.bind(this));
   	this.marker.addListener('mouseover', function() {
-    	this.tooltip.open(this.map, this.marker);
+    	this.setVisibityTooltip(true);
   	}.bind(this));
   	this.marker.addListener('mouseout', function() {
     	if(!hasClicked)
-    		this.tooltip.close(this.map, this.marker);
+    		this.setVisibityTooltip(false);
   	}.bind(this));
 
   	this.tooltip.addListener('closeclick', function() {
@@ -233,7 +264,6 @@ $.extend(Marker, {
 		w: 30,
 	 	h: 30
 	}
-
 })
 Marker.prototype = {
 	show: function(value){
@@ -258,7 +288,37 @@ Marker.prototype = {
 	},
 	update: function(){
 		this.tooltip.setContent(this.tooltipMakeup());
-	}
+	},
+	isVisibleTooltip: function(){
+		return this.visibilityTooltip;
+	},
+	setVisibityTooltip: function(value){
+		if(value)
+			this.tooltip.open(this.map, this.marker);
+		else
+			this.tooltip.close();
+
+		this.visibilityTooltip = value; 
+		this.onChangeTooltipVisibility(this, value);	
+	},
+	updateFormattedAddress: function(){
+		var position = this.getPosition();
+		if(position)
+			$.ajax( {
+				type: "GET",
+				url: "https://maps.googleapis.com/maps/api/geocode/json?latlng="+position.lat+","+position.lng,
+				dataType: 'json',
+				headers: {'Content-Type': 'text/plain'},
+			})
+		     .done(function(data) {
+		     	if(data.results[0].formatted_address)
+		     		this.formattedAddress = data.results[0].formatted_address;
+			 }.bind(this))
+			 .fail(function(data) {
+			    console.log("error:\n", data);
+			 });
+	},
+	onChangeTooltipVisibility: function(marker, visibility){}//event
 }
 
 function Bus(op){
@@ -272,7 +332,6 @@ function Bus(op){
 
 	this.position;
 	this.lastUpdate;
-	this.formattedAddress;
 	this.stopTime = 2*60*1000;
 	this.status = "";
 
@@ -316,22 +375,6 @@ Bus.prototype = {
 	clearDrawing: function(){//deprecated, see Marker.show();
 		this.show(false);
 	},
-	updateFormattedAddress: function(){
-		if(this.position)
-			$.ajax( {
-				type: "GET",
-				url: "https://maps.googleapis.com/maps/api/geocode/json?latlng="+this.position.lat+","+this.position.lng,
-				dataType: 'json',
-				headers: {'Content-Type': 'text/plain'},
-			})
-		     .done(function(data) {
-		     	if(data.results[0].formatted_address)
-		     		this.formattedAddress = data.results[0].formatted_address;
-			 }.bind(this))
-			 .fail(function(data) {
-			    console.log("error:\n", data);
-			 });
-	},
 	tooltipMakeup: function(){//@override
 		var tooltipContent = "<center><b>Ônibus "+this.id_buses+"</b></center>";
 		tooltipContent += "<p>"+(this.formattedAddress || "")+"</p>";
@@ -374,6 +417,71 @@ Bus.prototype = {
 }
 Bus.prototype = $.extend({}, Object.create(Marker.prototype), Object.create(Bus.prototype));
 Bus.prototype.constructor = Bus;
+
+function ReferencePoint(op){
+	Marker.call(this, op);
+	op = op || {};
+
+	 if(!op.id_routes)
+		throw new {message:"id_routes not defined"};
+	this.id_route = op.id_route;
+
+	this.name = op.name || "";
+	this.image = op.image || ReferencePoint.IMAGE;
+	this.description = op.description || "";
+
+	this.setIcon({
+		scaledSize: new google.maps.Size(ReferencePoint.ICON_SIZE.w, ReferencePoint.ICON_SIZE.h),
+		url: ReferencePoint.MARKER_HIGHLIGHT_ICON,//for load to cache
+		anchor: new google.maps.Point(Marker.ICON_SIZE.w/2, Marker.ICON_SIZE.h/2)
+	});
+
+	this.setIcon({url: ReferencePoint.MARKER_ICON});
+
+	this.update();
+}
+$.extend(ReferencePoint, {
+	MARKER_ICON: "assets/img/reference_marker.png",
+	MARKER_HIGHLIGHT_ICON: "assets/img/reference_highlight_marker.png",
+	ICON_SIZE: {w: 30, h: 30},
+	IMAGE: 'assets/img/marker.png',
+	IMAGE_SIZE: {w: 200, h: 110}
+});
+ReferencePoint.prototype = {
+	tooltipMakeup: function(){//@override
+		var tooltipContent = "<center><b>"+this.name+"</b></center>";
+		tooltipContent += "<center><img src='{1}' height='{2}' width='{3}' ></center>";
+		tooltipContent = tooltipContent.format(this.image, ReferencePoint.IMAGE_SIZE.h, ReferencePoint.IMAGE_SIZE.w);
+		tooltipContent += "<p>"+this.description+"</p>"
+		return tooltipContent;
+	},
+	setIcon: function(icon){//@override
+		if(typeof icon === 'string')
+			if(icon == 'stop')
+				this.marker.icon.url = Bus.MARKER_ICON_STOP;
+			else
+				this.marker.icon.url = Bus.MARKER_ICON;
+		else
+			Marker.prototype.setIcon.call(this, icon);
+	},
+	isStoped: function(){
+		var last = Date.parse(this.lastUpdate);
+		return Date.parse(new Date()) - last > this.stopTime;
+	},
+	setPosition: function(position){//@override
+		this.position = position;
+		Marker.prototype.setPosition.call(this, position);
+	},
+	onChangeTooltipVisibility: function(marker, visibility){
+		if(visibility)
+			this.setIcon({url: ReferencePoint.MARKER_HIGHLIGHT_ICON});
+		else
+			this.setIcon({url: ReferencePoint.MARKER_ICON});
+		this.update();
+	}
+}
+ReferencePoint.prototype = $.extend({}, Object.create(Marker.prototype), Object.create(ReferencePoint.prototype));
+ReferencePoint.prototype.constructor = ReferencePoint;
 
 function Panel(op){
 	this.op = op || {};
@@ -515,3 +623,10 @@ Panel.prototype = {
 			this.update(this.__init.bind(this));
 	}
 }
+
+String.prototype.format = function() {
+	var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) {
+      return typeof args[number-1] != 'undefined'? args[number-1] : match;
+    });
+};
