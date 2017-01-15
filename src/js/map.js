@@ -189,62 +189,111 @@ Route.prototype = {
 	onUpdateRouteAPI: function(){}
 }
 
-function Bus(op){
+function Marker(op){
 	op = op || {};
-
-	this.position;
-	this.lastUpdate;
-	this.formattedAddress;
-	this.stopTime = 2*60*1000;
-	this.status = "";
-	
-	if(!op.id_buses)
-		throw new {message:"id_buses not defined"};
-	this.id_buses = op.id_buses;
-	this.id_route = op.id_route || 0;
 
 	if(op.map === undefined)
 		throw new {message:"map not defined"};
-	var map = op.map
+	this.map = op.map;
+
 
 	var icon = {
-	    url: MARKER_ICON, // url
-	    scaledSize: new google.maps.Size(Bus.ICON_SIZE.w, Bus.ICON_SIZE.h), // scaled size
+	    url: Marker.MARKER_ICON, // url
+	    scaledSize: new google.maps.Size(Marker.ICON_SIZE.w, Marker.ICON_SIZE.h), // scaled size
 	    origin: new google.maps.Point(0,0), // origin
-	    anchor: new google.maps.Point(Bus.ICON_SIZE.w/2, Bus.ICON_SIZE.h) // anchor
+	    anchor: new google.maps.Point(Marker.ICON_SIZE.w/2, Marker.ICON_SIZE.h) // anchor
 	};
 
 	this.marker = new google.maps.Marker({
-            map: map,
+            map: this.map,
             icon: icon,
             animation: google.maps.Animation.DROP
     });
 
     this.tooltip = new google.maps.InfoWindow({
-    	content: "<b>ônibus "+this.id_buses+"</b>"
+    	content: this.tooltipMakeup()
   	});
+
+
+ 	this.setPosition(op.position || {lat: 0, lng: 0});
 
     //events marker tooltip
     var hasClicked = false;
   	this.marker.addListener('click', function() {
     	hasClicked = true;
-    	this.tooltip.open(map, this.marker);
+    	this.tooltip.open(this.map, this.marker);
   	}.bind(this));
   	this.marker.addListener('mouseover', function() {
-    	this.tooltip.open(map, this.marker);
+    	this.tooltip.open(this.map, this.marker);
   	}.bind(this));
   	this.marker.addListener('mouseout', function() {
     	if(!hasClicked)
-    		this.tooltip.close(map, this.marker);
+    		this.tooltip.close(this.map, this.marker);
   	}.bind(this));
 
   	this.tooltip.addListener('closeclick', function() {
     	hasClicked = false;
   	}.bind(this));
 }
-$.extend(Bus, {
-	ICON_SIZE: {w: 30, h: 35}
+$.extend(Marker, {
+	MARKER_ICON: "assets/img/marker.png",
+	ICON_SIZE: {
+		w: 30,
+	 	h: 30
+	}
+
 })
+Marker.prototype = {
+	show: function(value){
+		if(value)
+			this.marker.setMap(this.map);
+		else
+			this.marker.setMap(null);
+	},
+	setIcon: function(icon){
+		icon.size = icon.scaledSize;
+		this.marker.setIcon($.extend({}, this.marker.icon, icon));
+	},
+	tooltipMakeup: function(){
+		return "<b>Tooltip</b>";
+	},
+	setPosition: function(position){
+ 		this.marker.setPosition(position);
+	},
+	getPosition: function(){
+		var position = this.marker.getPosition();
+		return {lat: position.lat(), lng: position.lng()};
+	},
+	update: function(){
+		this.tooltip.setContent(this.tooltipMakeup());
+	}
+}
+
+function Bus(op){
+	Marker.call(this, op);
+	op = op || {};
+
+	 if(!op.id_buses)
+		throw new {message:"id_buses not defined"};
+	this.id_buses = op.id_buses;
+	this.id_route = op.id_route || 0;
+
+	this.position;
+	this.lastUpdate;
+	this.formattedAddress;
+	this.stopTime = 2*60*1000;
+	this.status = "";
+
+	this.setIcon({
+		scaledSize: new google.maps.Size(Bus.ICON_SIZE.w, Bus.ICON_SIZE.h),
+		url: Bus.MARKER_ICON
+	});
+}
+$.extend(Bus, {
+	MARKER_ICON: "assets/img/marker.png",
+	MARKER_ICON_STOP: "assets/img/marker-stop.png",
+	ICON_SIZE: {w: 30, h: 35}
+});
 Bus.prototype = {
 	updatePosition: function(){
 		$.ajax( {
@@ -255,9 +304,8 @@ Bus.prototype = {
 		})
 	     .done(function(data) {
 	     	if(data[0]){
-		     	this.position = {lat: data[0].latitude, lng: data[0].longitude};
 		     	this.lastUpdate = data[0].date;
-		     	this.marker.setPosition(this.position);
+		     	this.setPosition({lat: data[0].latitude, lng: data[0].longitude})
 		     	this.updateFormattedAddress();
 		     	
 		     	if(this.isStoped())
@@ -271,10 +319,10 @@ Bus.prototype = {
 		    console.log("error:\n", data);
 		 });
 
-		 this.updateTooltip();
+		 this.update();
 	},
-	clearDrawing: function(){
-		this.marker.setMap(null);
+	clearDrawing: function(){//deprecated, see Marker.show();
+		this.show(false);
 	},
 	updateFormattedAddress: function(){
 		if(this.position)
@@ -292,27 +340,34 @@ Bus.prototype = {
 			    console.log("error:\n", data);
 			 });
 	},
-	updateTooltip: function(){
-		tooltipContent = "<center><b>Ônibus "+this.id_buses+"</b></center>";
+	tooltipMakeup: function(){//@override
+		var tooltipContent = "<center><b>Ônibus "+this.id_buses+"</b></center>";
 		tooltipContent += "<p>"+(this.formattedAddress || "")+"</p>";
 		if(this.lastUpdate)
 			tooltipContent += "<p style='text-align:right;font-size:10px'> "+this.timeAgoText+" "+this.getTimeAgo()+"</p>";
 		
-		this.tooltip.setContent(tooltipContent);
+		return tooltipContent;
 	},
 	getTimeAgo: function(){
 		var time = Date.parse(this.lastUpdate);
 		return jQuery.timeago(new Date(time));
 	},
-	setIcon: function(icon){
-		if(icon == 'stop')
-			this.marker.icon.url = MARKER_ICON_STOP;
+	setIcon: function(icon){//@override
+		if(typeof icon === 'string')
+			if(icon == 'stop')
+				this.marker.icon.url = Bus.MARKER_ICON_STOP;
+			else
+				this.marker.icon.url = Bus.MARKER_ICON;
 		else
-			this.marker.icon.url = MARKER_ICON;
+			Marker.prototype.setIcon.call(this, icon);
 	},
 	isStoped: function(){
 		var last = Date.parse(this.lastUpdate);
 		return Date.parse(new Date()) - last > this.stopTime;
+	},
+	setPosition: function(position){//@override
+		this.position = position;
+		Marker.prototype.setPosition.call(this, position);
 	},
 	setStatus: function(status){
 		this.setIcon(status);
@@ -325,6 +380,8 @@ Bus.prototype = {
 		}
 	}
 }
+Bus.prototype = $.extend({}, Object.create(Marker.prototype), Object.create(Bus.prototype));
+Bus.prototype.constructor = Bus;
 
 function Panel(op){
 	this.op = op || {};
@@ -369,7 +426,6 @@ Panel.prototype = {
 			headers: {'Content-Type': 'text/plain', 'Token': TOKEN },
 		})
 	     .done(function(routes) {
-	     	console.log(routes);
 	     	this.routes = routes;
 	     	var options = {
 			  valueNames: [ 'title', 'description', 'id_route'],
@@ -396,7 +452,6 @@ Panel.prototype = {
 			for(var i = 0; i < items.length; i++){
 
 				$(items[i].elm).on("click", function(){
-					console.log(items[this.index].values().id_route);
 					selecteRoute(items[this.index].values().id_route);
 					$("#select-route-modal").modal("hide");
 				}.bind({index: i+0}));
