@@ -1,10 +1,3 @@
-var SERVER_PREFIX = "http://200.129.37.177/bustracker/BusTrackerAPI/index.php";
-var ROUTE = 86;
-var UPDATE_TIME_POSITION = 3000;
-var UPDATE_TIME_MESSAGE = 5000;
-var TOKEN = "JpURojQBMP7fD5gYC6t26jb9A40FPae2JNjRBzJpo4NoBgpkRKOW6U8b8naLPa+dEvR0Z0+tHcHEnp8Wxjj4MGfVYarqY73d2j9cF5cCAuEpus2Oj9bmuCVQjbxF7wPIViWRi99yO0YZOGF4EEpaZGRiTJCMaAV+CcyHa15soT5AY+qOJgHEsqK2irem9TYuPZP0DKipQK0sWYNoDGyszYPo0x71W8H7uVT69GFzgJQ=";
-var MARKER_ICON = "assets/img/marker.png";
-var MARKER_ICON_STOP = "assets/img/marker-stop.png";
 var map;
 var route;
 var timerId;
@@ -25,9 +18,9 @@ function initMap() {
 	//check messages
 	setInterval(function(){
 		panel.update();
-	}, UPDATE_TIME_MESSAGE);
+	}, BusTracker.UPDATE_TIME_MESSAGE);
 
-	selecteRoute(ROUTE);
+	selecteRoute(BusTracker.ROUTE);
 
 	showUserLocation();
 }
@@ -59,7 +52,6 @@ function showUserLocation(){
 
 	var onPosition = function(position) {
 		marker.setMap(map);
-		console.log(position);
 		var position = {lat: position.coords.latitude, lng: position.coords.longitude};
   		marker.setPosition(position);
 	};
@@ -81,7 +73,7 @@ function selecteRoute(id){
 		timerId = setInterval(function(){
 			if(route.update)
 				route.update(false);
-		}, UPDATE_TIME_POSITION);
+		}, BusTracker.UPDATE_TIME_POSITION);
 
 		panel.setRoute(route);
 	}
@@ -123,9 +115,9 @@ Route.prototype = {
 	__getRouteFromApi: function(callback){
 		$.ajax( {
 			type: "GET",
-			url: SERVER_PREFIX+"/routes/"+this.id_route,
+			url: BusTracker.SERVER_PREFIX+"/routes/"+this.id_route,
 			dataType: 'json',
-			headers: {'Content-Type': 'text/plain', 'Token': TOKEN },
+			headers: {'Content-Type': 'text/plain', 'Token': BusTracker.TOKEN },
 		})
 	     .done(function(data) {
 	     	this.routeAPI = data;
@@ -298,9 +290,9 @@ Bus.prototype = {
 	updatePosition: function(){
 		$.ajax( {
 			type: "GET",
-			url: SERVER_PREFIX+"/routes/"+this.id_route+"/buses/"+this.id_buses+"/positions?length=1",
+			url: BusTracker.SERVER_PREFIX+"/routes/"+this.id_route+"/buses/"+this.id_buses+"/positions?length=1",
 			dataType: 'json',
-			headers: {'Content-Type': 'text/plain', 'Token': TOKEN },
+			headers: {'Content-Type': 'text/plain', 'Token': BusTracker.TOKEN },
 		})
 	     .done(function(data) {
 	     	if(data[0]){
@@ -421,9 +413,9 @@ Panel.prototype = {
 	__makeRoutesList: function(){
 		$.ajax( {
 			type: "GET",
-			url: SERVER_PREFIX+"/routes",
+			url: BusTracker.SERVER_PREFIX+"/routes",
 			dataType: 'json',
-			headers: {'Content-Type': 'text/plain', 'Token': TOKEN },
+			headers: {'Content-Type': 'text/plain', 'Token': BusTracker.TOKEN },
 		})
 	     .done(function(routes) {
 	     	this.routes = routes;
@@ -490,9 +482,9 @@ Panel.prototype = {
 			//request messages
 		 	$.ajax( {
 				type: "GET",
-				url: SERVER_PREFIX+"/routes/"+this.route.id_route+"/messages?buses=true",
+				url: BusTracker.SERVER_PREFIX+"/routes/"+this.route.id_route+"/messages?buses=true",
 				dataType: 'json',
-				headers: {'Content-Type': 'text/plain', 'Token': TOKEN },
+				headers: {'Content-Type': 'text/plain', 'Token': BusTracker.TOKEN },
 			})
 		     .done(function(data) {
 		     	this.messages = data;

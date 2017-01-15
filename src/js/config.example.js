@@ -1,0 +1,7 @@
+BusTracker = {
+	SERVER_PREFIX: "http://localhost:3000",
+	ROUTE: 86,
+	UPDATE_TIME_POSITION: 3000,
+	UPDATE_TIME_MESSAGE: 5000,
+	TOKEN: "3IlOk7z...G3ohX4=",
+};

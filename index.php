@@ -87,6 +87,7 @@
     <script type="text/javascript" src="./node_modules/list.js/dist/list.min.js"></script>
     <script type="text/javascript" src="./node_modules/timeago/jquery.timeago.js"></script>
     <script type="text/javascript" src="./node_modules/timeago/locales/jquery.timeago.pt-br.js"></script>
+    <script type="text/javascript" src="./src/js/config.js"></script>
     <script type="text/javascript" src="./src/js/map.js">
     </script>
     <script async defer
